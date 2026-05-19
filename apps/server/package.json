@@ -15,6 +15,7 @@
     "@fastify/jwt": "^8.0.0",
     "@portfolio-tracker/shared": "workspace:*",
     "@prisma/client": "^5.14.0",
+    "axios": "^1.16.1",
     "bcrypt": "^6.0.0",
     "fastify": "^4.27.0",
     "ioredis": "^5.3.0",
