@@ -3,6 +3,7 @@ import { registerPlugins } from "./plugins/index"
 import { authRoutes } from "./modules/auth/auth.route"
 import { portfolioRoutes } from "./modules/portfolio/portfolio.route"
 import { holdingRoutes } from "./modules/holding/holding.route"
+import { watchlistRoutes } from "./modules/watchlist/watchlist.route"
 
 const app = Fastify({ logger: true })
 
@@ -11,6 +12,7 @@ const start = async () => {
   await app.register(authRoutes)
   await app.register(portfolioRoutes)
   await app.register(holdingRoutes)
+  await app.register(watchlistRoutes)
 
   app.get("/health", async () => ({ status: "ok" }))
 
