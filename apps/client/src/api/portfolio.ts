@@ -1,10 +1,12 @@
 import api from "../lib/api"
+import { type Holding } from "./holding"
 
 export interface Portfolio {
   id: string
   name: string
   description?: string
   createdAt: string
+  holdings?: Holding[]
 }
 
 export const portfolioApi = {
