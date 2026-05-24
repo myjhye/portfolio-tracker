@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. DB 실행 (Docker)",
+      "type": "shell",
+      "command": "docker compose up -d",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": "build"
+    },
+    {
+      "label": "2. Server 실행 (Fastify)",
+      "type": "shell",
+      "command": "pnpm dev",
+      "options": {
+        "cwd": "${workspaceFolder}/apps/server"
+      },
+      "presentation": {
+        "reveal": "always",
+        "group": "server-pane"
+      },
+      "dependsOn": ["1. DB 실행 (Docker)"]
+    },
+    {
+      "label": "3. Client 실행 (React)",
+      "type": "shell",
+      "command": "pnpm dev",
+      "options": {
+        "cwd": "${workspaceFolder}/apps/client"
+      },
+      "presentation": {
+        "reveal": "always",
+        "group": "client-pane"
+      }
+    },
+    {
+      "label": "🚀 전체 실행 (Run All)",
+      "dependsOn": [
+        "2. Server 실행 (Fastify)",
+        "3. Client 실행 (React)"
+      ],
+      "dependsOrder": "parallel",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
