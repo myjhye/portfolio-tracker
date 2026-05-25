@@ -1,9 +1,21 @@
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { AddHoldingSchema, type AddHoldingInput } from "@portfolio-tracker/shared"
+import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+
+const AddHoldingSchema = z.object({
+  symbol: z.string().min(1),
+  quantity: z.number().positive(),
+  avgPrice: z.number().positive(),
+})
+
+type AddHoldingInput = {
+  symbol: string
+  quantity: number
+  avgPrice: number
+}
 
 interface Props {
   onSubmit: (data: AddHoldingInput) => Promise<void>
@@ -12,7 +24,7 @@ interface Props {
 
 export default function HoldingForm({ onSubmit, onCancel }: Props) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AddHoldingInput>({
-    resolver: zodResolver(AddHoldingSchema),
+    resolver: zodResolver(AddHoldingSchema) as Resolver<AddHoldingInput>,
   })
 
   return (

@@ -5,7 +5,7 @@ import fastifyCors from "@fastify/cors"
 
 export async function registerPlugins(app: FastifyInstance) {
   await app.register(fastifyCors, {
-    origin: "http://localhost:5173",
+    origin: /^http:\/\/localhost:\d+$/,
     credentials: true,
   })
 
