@@ -33,3 +33,27 @@ export async function fetchQuote(symbol: string): Promise<{ symbol: string; pric
     changePercent: parseFloat(quote["10. change percent"].replace("%", "")),
   }
 }
+
+/**
+ * 종목 심볼로 일별 종가 히스토리 조회 (최근 100일)
+ * @returns 날짜 오름차순 배열 | null (종목 없음·응답 비정상)
+ */
+export async function fetchDailyHistory(symbol: string) {
+  const { data } = await axios.get(BASE_URL, {
+    params: {
+      function: "TIME_SERIES_DAILY",
+      symbol,
+      outputsize: "compact",
+      apikey: API_KEY,
+    },
+  })
+  const series = data["Time Series (Daily)"]
+  if (!series) return null
+
+  return Object.entries(series)
+    .map(([date, values]: [string, any]) => ({
+      date,
+      close: parseFloat(values["4. close"]),
+    }))
+    .reverse()
+}

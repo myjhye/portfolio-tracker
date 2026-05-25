@@ -11,3 +11,13 @@ export interface Quote {
 export const quoteApi = {
   get: (symbol: string) => api.get<Quote>(`/quotes/${symbol}`).then((r) => r.data),
 }
+
+export interface HistoryPoint {
+  date: string
+  close: number
+}
+
+export const historyApi = {
+  get: (symbol: string) =>
+    api.get<HistoryPoint[]>(`/quotes/${symbol}/history`).then((r) => r.data),
+}

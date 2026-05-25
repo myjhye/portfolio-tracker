@@ -6,10 +6,12 @@
  */
 import { FastifyRequest, FastifyReply } from "fastify"
 import redis from "../../lib/redis"
-import { fetchQuote } from "../../lib/alphaVantage"
+import { fetchQuote, fetchDailyHistory } from "../../lib/alphaVantage"
 
-/** 캐시 유효 시간(초) — 5분 */
+/** 시세 캐시 유효 시간(초) — 5분 */
 const CACHE_TTL = 60 * 5
+/** 히스토리 캐시 유효 시간(초) — 1시간 */
+const HISTORY_TTL = 60 * 60
 
 /**
  * GET /quotes/:symbol — 종목 시세 조회
@@ -42,5 +44,30 @@ export async function getQuoteHandler(req: FastifyRequest, reply: FastifyReply) 
       return reply.send({ ...JSON.parse(stale), fromCache: true, stale: true })
     }
     reply.status(503).send({ message: "시세 데이터를 가져올 수 없습니다" })
+  }
+}
+
+/**
+ * GET /quotes/:symbol/history — 일별 종가 히스토리
+ *
+ * Redis 1시간 캐시 적용
+ */
+export async function getHistoryHandler(
+  req: FastifyRequest<{ Params: { symbol: string } }>,
+  reply: FastifyReply
+) {
+  const symbol = req.params.symbol.toUpperCase()
+  const cacheKey = `history:${symbol}`
+
+  const cached = await redis.get(cacheKey)
+  if (cached) return reply.send(JSON.parse(cached))
+
+  try {
+    const history = await fetchDailyHistory(symbol)
+    if (!history) return reply.status(404).send({ message: "히스토리를 찾을 수 없습니다" })
+    await redis.setex(cacheKey, HISTORY_TTL, JSON.stringify(history))
+    reply.send(history)
+  } catch {
+    reply.status(503).send({ message: "히스토리 데이터를 가져올 수 없습니다" })
   }
 }
