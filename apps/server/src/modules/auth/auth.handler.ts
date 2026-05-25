@@ -3,6 +3,8 @@ import bcrypt from "bcrypt"
 import prisma from "../../lib/prisma"
 import { RegisterSchema, LoginSchema } from "@portfolio-tracker/shared"
 
+// ── 회원가입 ──
+// 1) 입력값 검증 → 2) 이메일 중복 확인 → 3) 비밀번호 해싱 후 DB 저장 → 4) JWT 쿠키 발급
 export async function registerHandler(req: FastifyRequest, reply: FastifyReply) {
   const body = RegisterSchema.parse(req.body)
 
@@ -20,6 +22,8 @@ export async function registerHandler(req: FastifyRequest, reply: FastifyReply) 
     .send({ id: user.id, email: user.email, name: user.name })
 }
 
+// ── 로그인 ──
+// 1) 입력값 검증 → 2) 이메일로 유저 조회 → 3) 비밀번호 비교 → 4) JWT 쿠키 발급
 export async function loginHandler(req: FastifyRequest, reply: FastifyReply) {
   const body = LoginSchema.parse(req.body)
 
@@ -35,10 +39,12 @@ export async function loginHandler(req: FastifyRequest, reply: FastifyReply) {
     .send({ id: user.id, email: user.email, name: user.name })
 }
 
+// ── 로그아웃: 쿠키 삭제 ──
 export async function logoutHandler(_req: FastifyRequest, reply: FastifyReply) {
   reply.clearCookie("token", { path: "/" }).send({ message: "로그아웃 되었습니다" })
 }
 
+// ── 회원탈퇴: DB에서 유저 삭제 + 쿠키 삭제 ──
 export async function deleteAccountHandler(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.user as { id: string }
   await prisma.user.delete({ where: { id } })
