@@ -3,12 +3,30 @@ import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useVirtualizer } from "@tanstack/react-virtual"
 import { portfolioApi } from "@/api/portfolio"
-import { holdingApi } from "@/api/holding"
-import { type AddHoldingInput } from "@portfolio-tracker/shared"
+import { holdingApi, type Holding } from "@/api/holding"
+import { z } from "zod"
 import HoldingForm from "@/components/holding/HoldingForm"
 import HoldingRow from "@/components/holding/HoldingRow"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+const AddHoldingSchema = z.object({
+  symbol: z.string().min(1),
+  quantity: z.number().positive(),
+  avgPrice: z.number().positive(),
+})
+type AddHoldingInput = z.infer<typeof AddHoldingSchema> & {
+  symbol: string
+  quantity: number
+  avgPrice: number
+}
+
+interface PortfolioWithHoldings {
+  id: string
+  name: string
+  description?: string
+  holdings: Holding[]
+}
 
 export default function PortfolioDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -34,15 +52,58 @@ export default function PortfolioDetailPage() {
 
   const addMutation = useMutation({
     mutationFn: (data: AddHoldingInput) => holdingApi.add(id!, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["portfolio", id] })
+    onMutate: async (newHolding) => {
+      await queryClient.cancelQueries({ queryKey: ["portfolio", id] })
+      const previous = queryClient.getQueryData<PortfolioWithHoldings>(["portfolio", id])
+
+      queryClient.setQueryData<PortfolioWithHoldings>(["portfolio", id], (old) => {
+        if (!old) return old
+        const existing = old.holdings ?? []
+        const optimistic: Holding = {
+          id: `temp-${Date.now()}`,
+          symbol: newHolding.symbol.toUpperCase(),
+          quantity: newHolding.quantity,
+          avgPrice: newHolding.avgPrice,
+          order: existing.length,
+          portfolioId: id!,
+        }
+        return { ...old, holdings: [...existing, optimistic] }
+      })
+
       setShowForm(false)
+      return { previous }
+    },
+    onError: (_err, _data, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["portfolio", id], context.previous)
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["portfolio", id] })
     },
   })
 
   const deleteMutation = useMutation({
     mutationFn: (holdingId: string) => holdingApi.delete(id!, holdingId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["portfolio", id] }),
+    onMutate: async (holdingId) => {
+      await queryClient.cancelQueries({ queryKey: ["portfolio", id] })
+      const previous = queryClient.getQueryData<PortfolioWithHoldings>(["portfolio", id])
+
+      queryClient.setQueryData<PortfolioWithHoldings>(["portfolio", id], (old) => {
+        if (!old) return old
+        return { ...old, holdings: (old.holdings ?? []).filter((h) => h.id !== holdingId) }
+      })
+
+      return { previous }
+    },
+    onError: (_err, _data, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["portfolio", id], context.previous)
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["portfolio", id] })
+    },
   })
 
   if (isLoading) return <div className="p-8 text-muted-foreground">불러오는 중...</div>
