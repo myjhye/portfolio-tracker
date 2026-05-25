@@ -9,6 +9,7 @@ import RegisterPage from "./pages/auth/RegisterPage"
 import DashboardPage from "./pages/dashboard/DashboardPage"
 import PortfolioPage from "./pages/portfolio/PortfolioPage"
 import PortfolioDetailPage from "./pages/portfolio/PortfolioDetailPage"
+import WatchlistPage from "./pages/watchlist/WatchlistPage"
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 1000 * 60 } },
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/portfolios" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
           <Route path="/portfolios/:id" element={<ProtectedRoute><PortfolioDetailPage /></ProtectedRoute>} />
+          <Route path="/watchlist" element={<ProtectedRoute><WatchlistPage /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/portfolios" replace />} />
         </Routes>
       </BrowserRouter>
