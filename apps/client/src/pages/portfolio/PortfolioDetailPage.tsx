@@ -21,6 +21,7 @@ import { holdingApi, type Holding } from "@/api/holding"
 import { z } from "zod"
 import HoldingForm from "@/components/holding/HoldingForm"
 import SortableHoldingRow from "@/components/holding/SortableHoldingRow"
+import SectorChart from "@/components/chart/SectorChart"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -166,6 +167,17 @@ export default function PortfolioDetailPage() {
 
       {portfolio.description && (
         <p className="text-muted-foreground">{portfolio.description}</p>
+      )}
+
+      {holdings.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>종목 비중</CardTitle>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <SectorChart holdings={holdings} />
+          </CardContent>
+        </Card>
       )}
 
       <Card>
