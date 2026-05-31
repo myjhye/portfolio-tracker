@@ -5,6 +5,7 @@ import { type Holding } from "@/api/holding"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import PriceChart from "@/components/chart/PriceChart"
+import ErrorBoundary from "@/components/common/ErrorBoundary"
 
 interface Props {
   holding: Holding
@@ -78,9 +79,13 @@ export default function HoldingRow({ holding, onDelete, dragHandleProps }: Props
 
       {/* 차트 영역: 심볼 클릭 시 펼침 */}
       {showChart && (
-        <div className="px-4 pb-4">
-          <PriceChart symbol={holding.symbol} />
-        </div>
+        <ErrorBoundary fallback={
+          <div className="px-4 pb-4 text-sm text-muted-foreground">차트를 불러오지 못했습니다</div>
+        }>
+          <div className="px-4 pb-4">
+            <PriceChart symbol={holding.symbol} />
+          </div>
+        </ErrorBoundary>
       )}
     </div>
   )

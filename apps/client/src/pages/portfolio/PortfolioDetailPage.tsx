@@ -22,6 +22,7 @@ import { z } from "zod"
 import HoldingForm from "@/components/holding/HoldingForm"
 import SortableHoldingRow from "@/components/holding/SortableHoldingRow"
 import SectorChart from "@/components/chart/SectorChart"
+import ErrorBoundary from "@/components/common/ErrorBoundary"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -170,16 +171,27 @@ export default function PortfolioDetailPage() {
       )}
 
       {holdings.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>종목 비중</CardTitle>
-          </CardHeader>
-          <CardContent className="flex justify-center">
-            <SectorChart holdings={holdings} />
-          </CardContent>
-        </Card>
+        <ErrorBoundary fallback={
+          <div className="flex items-center justify-center h-24 text-sm text-muted-foreground border border-dashed rounded-lg">
+            차트를 불러오지 못했습니다
+          </div>
+        }>
+          <Card>
+            <CardHeader>
+              <CardTitle>종목 비중</CardTitle>
+            </CardHeader>
+            <CardContent className="flex justify-center">
+              <SectorChart holdings={holdings} />
+            </CardContent>
+          </Card>
+        </ErrorBoundary>
       )}
 
+      <ErrorBoundary fallback={
+        <div className="flex items-center justify-center h-24 text-sm text-muted-foreground border border-dashed rounded-lg">
+          종목 목록을 불러오지 못했습니다
+        </div>
+      }>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>보유 종목</CardTitle>
@@ -221,6 +233,7 @@ export default function PortfolioDetailPage() {
           </DndContext>
         </CardContent>
       </Card>
+      </ErrorBoundary>
     </div>
   )
 }
