@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useThemeStore } from "./store/themeStore"
 import ProtectedRoute from "./routes/ProtectedRoute"
 import PublicRoute from "./routes/PublicRoute"
+import Layout from "./components/layout/Layout"
 import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
 import DashboardPage from "./pages/dashboard/DashboardPage"
@@ -28,10 +29,26 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="/portfolios" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
-          <Route path="/portfolios/:id" element={<ProtectedRoute><PortfolioDetailPage /></ProtectedRoute>} />
-          <Route path="/watchlist" element={<ProtectedRoute><WatchlistPage /></ProtectedRoute>} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Layout><DashboardPage /></Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/portfolios" element={
+            <ProtectedRoute>
+              <Layout><PortfolioPage /></Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/portfolios/:id" element={
+            <ProtectedRoute>
+              <Layout><PortfolioDetailPage /></Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/watchlist" element={
+            <ProtectedRoute>
+              <Layout><WatchlistPage /></Layout>
+            </ProtectedRoute>
+          } />
           <Route path="*" element={<Navigate to="/portfolios" replace />} />
         </Routes>
       </BrowserRouter>
