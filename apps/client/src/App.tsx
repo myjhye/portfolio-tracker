@@ -11,7 +11,7 @@ import PortfolioDetailPage from "./pages/portfolio/PortfolioDetailPage"
 import WatchlistPage from "./pages/watchlist/WatchlistPage"
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: 1, staleTime: 1000 * 60 } },
+  defaultOptions: { queries: { retry: 1, staleTime: 1000 * 60 * 60 * 24 } }, // 24시간
 })
 
 export default function App() {

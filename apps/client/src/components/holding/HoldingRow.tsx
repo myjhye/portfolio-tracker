@@ -19,7 +19,7 @@ export default function HoldingRow({ holding, onDelete, dragHandleProps, rowRef,
   const { data: quote } = useQuery({
     queryKey: ["quote", holding.symbol],
     queryFn: () => quoteApi.get(holding.symbol),
-    refetchInterval: 1000 * 60,
+    refetchInterval: 1000 * 60 * 60 * 24, // 24시간
   })
 
   const currentValue = quote ? quote.price * holding.quantity : null

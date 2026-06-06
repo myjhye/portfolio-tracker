@@ -14,7 +14,7 @@ export default function SectorChart({ holdings }: Props) {
     queries: holdings.map((h) => ({
       queryKey: ["quote", h.symbol],
       queryFn: () => quoteApi.get(h.symbol),
-      staleTime: 1000 * 60,
+      staleTime: 1000 * 60 * 60 * 24,
     })),
   })
 

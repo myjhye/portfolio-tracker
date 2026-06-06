@@ -7,7 +7,7 @@ function WatchlistRow({ symbol, onDelete }: { symbol: string; onDelete: () => vo
   const { data: quote } = useQuery({
     queryKey: ["quote", symbol],
     queryFn: () => quoteApi.get(symbol),
-    refetchInterval: 1000 * 60,
+    refetchInterval: 1000 * 60 * 60 * 24, // 24시간
   })
 
   const isPositive = quote && quote.changePercent >= 0

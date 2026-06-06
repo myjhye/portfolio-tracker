@@ -2,16 +2,14 @@
  * 시세(Quotes) 핸들러
  *
  * Alpha Vantage 호출 전 Redis 캐시를 확인하고, API 실패 시 stale 캐시로 fallback 합니다.
- * 무료 API rate limit 완화를 위해 TTL 5분 캐시를 사용합니다.
+ * 무료 API rate limit 완화를 위해 TTL 24시간 캐시를 사용합니다.
  */
 import { FastifyRequest, FastifyReply } from "fastify"
 import redis from "../../lib/redis"
 import { fetchQuote, fetchDailyHistory } from "../../lib/alphaVantage"
 
-/** 시세 캐시 유효 시간(초) — 5분 */
-const CACHE_TTL = 60 * 5
-/** 히스토리 캐시 유효 시간(초) — 1시간 */
-const HISTORY_TTL = 60 * 60
+const QUOTE_TTL = 60 * 60 * 24      // 24시간
+const HISTORY_TTL = 60 * 60 * 24 * 7 // 7일
 
 /**
  * GET /quotes/:symbol — 종목 시세 조회
@@ -35,7 +33,7 @@ export async function getQuoteHandler(req: FastifyRequest, reply: FastifyReply) 
     const quote = await fetchQuote(symbol)
     if (!quote) return reply.status(404).send({ message: "종목을 찾을 수 없습니다" })
 
-    await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(quote))
+    await redis.setex(cacheKey, QUOTE_TTL, JSON.stringify(quote))
     reply.send({ ...quote, fromCache: false })
   } catch {
     // 3) API 오류 — stale 키가 있으면 만료 데이터라도 반환
@@ -50,7 +48,7 @@ export async function getQuoteHandler(req: FastifyRequest, reply: FastifyReply) 
 /**
  * GET /quotes/:symbol/history — 일별 종가 히스토리
  *
- * Redis 1시간 캐시 적용
+ * Redis 7일 캐시 적용
  */
 export async function getHistoryHandler(
   req: FastifyRequest<{ Params: { symbol: string } }>,
