@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreatePortfolioSchema, type CreatePortfolioInput } from "@portfolio-tracker/shared"
 import { Button } from "@/components/ui/button"
@@ -14,7 +14,7 @@ interface Props {
 
 export default function PortfolioForm({ defaultValues, onSubmit, onCancel, submitLabel = "저장" }: Props) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreatePortfolioInput>({
-    resolver: zodResolver(CreatePortfolioSchema),
+    resolver: zodResolver(CreatePortfolioSchema) as Resolver<CreatePortfolioInput>,
     defaultValues,
   })
 

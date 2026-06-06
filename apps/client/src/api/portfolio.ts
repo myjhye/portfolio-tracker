@@ -6,6 +6,9 @@ export interface Portfolio {
   name: string
   description?: string
   createdAt: string
+  updatedAt: string
+  holdingCount?: number
+  symbols?: string[]
   holdings?: Holding[]
 }
 
