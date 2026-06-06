@@ -1,6 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useAuthStore } from "@/store/authStore"
-import { useThemeStore } from "@/store/themeStore"
 import api from "@/lib/api"
 
 const NAV_ITEMS = [
@@ -16,12 +15,6 @@ export default function Header() {
   const location = useLocation()
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
-  const isDark = useThemeStore((s) => s.isDark)
-  const toggle = useThemeStore((s) => s.toggle)
-
-  const handleToggle = () => {
-    toggle()
-  }
 
   const handleLogout = async () => {
     await api.post("/auth/logout")
@@ -76,14 +69,6 @@ export default function Header() {
             </svg>
             GitHub
           </a>
-          <button
-            onClick={handleToggle}
-            className="p-xs rounded-full hover:bg-surface-container-high/50 transition-all duration-200"
-          >
-            <span className="material-symbols-outlined text-on-surface-variant">
-              {isDark ? "light_mode" : "dark_mode"}
-            </span>
-          </button>
           {user && (
             <div className="flex items-center gap-sm ml-base">
               <span className="text-label-mono text-on-surface-variant">{user.name}</span>
