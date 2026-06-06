@@ -16,8 +16,6 @@ import HoldingForm from "@/components/holding/HoldingForm"
 import SortableHoldingRow from "@/components/holding/SortableHoldingRow"
 import SectorChart from "@/components/chart/SectorChart"
 import ErrorBoundary from "@/components/common/ErrorBoundary"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const AddHoldingSchema = z.object({
   symbol: z.string().min(1),
@@ -50,7 +48,6 @@ export default function PortfolioDetailPage() {
   })
 
   const holdings = portfolio?.holdings ?? []
-
   const totalCost = holdings.reduce((sum, h) => sum + h.avgPrice * h.quantity, 0)
 
   const addMutation = useMutation({
@@ -114,83 +111,95 @@ export default function PortfolioDetailPage() {
   }
 
   if (isLoading) return (
-    <div className="flex items-center justify-center h-48 text-muted-foreground text-sm">
+    <div className="flex items-center justify-center h-48 text-on-surface-variant text-body-md">
       불러오는 중...
     </div>
   )
   if (!portfolio) return (
-    <div className="flex items-center justify-center h-48 text-muted-foreground text-sm">
+    <div className="flex items-center justify-center h-48 text-on-surface-variant text-body-md">
       포트폴리오를 찾을 수 없습니다
     </div>
   )
 
   return (
-    <div className="space-y-6">
+    <div>
+      {/* 뒤로가기 */}
+      <div className="mb-lg">
+        <button
+          onClick={() => navigate("/portfolios")}
+          className="inline-flex items-center text-on-surface-variant hover:text-primary transition-colors gap-xs group"
+        >
+          <span className="material-symbols-outlined text-[20px] group-hover:-translate-x-1 transition-transform">
+            arrow_back
+          </span>
+          <span className="text-label-mono">Back to Portfolios</span>
+        </button>
+      </div>
 
-      {/* 헤더 */}
-      <div className="border-b pb-5">
-        <div className="flex items-center gap-3 mb-1">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/portfolios")}
-            className="text-muted-foreground -ml-2">
-            ← 목록
-          </Button>
+      {/* 포트폴리오 헤더 */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+        <div>
+          <h1 className="text-headline-lg font-bold text-on-surface">{portfolio.name}</h1>
+          {portfolio.description && (
+            <p className="text-body-md text-on-surface-variant mt-xs">{portfolio.description}</p>
+          )}
         </div>
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">{portfolio.name}</h1>
-            {portfolio.description && (
-              <p className="text-muted-foreground text-sm mt-0.5">{portfolio.description}</p>
-            )}
-          </div>
-          <div className="text-right">
-            <p className="text-xs text-muted-foreground">총 매수금액</p>
-            <p className="text-xl font-bold">
-              ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-            </p>
+        <div className="flex flex-col items-end">
+          <span className="text-label-mono text-on-surface-variant uppercase tracking-wider">
+            Total Cost Basis
+          </span>
+          <div className="text-data-lg-mono font-bold text-primary">
+            ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
           </div>
         </div>
       </div>
 
-      {/* 종목 비중 차트 */}
-      {holdings.length > 0 && (
-        <ErrorBoundary fallback={
-          <div className="h-24 flex items-center justify-center text-sm text-muted-foreground border border-dashed rounded-lg">
-            차트를 불러오지 못했습니다
-          </div>
-        }>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                종목 비중
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex justify-center pb-4">
-              <SectorChart holdings={holdings} />
-            </CardContent>
-          </Card>
-        </ErrorBoundary>
-      )}
+      {/* 2컬럼 그리드 */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-lg">
 
-      {/* 보유 종목 */}
-      <ErrorBoundary fallback={
-        <div className="h-24 flex items-center justify-center text-sm text-muted-foreground border border-dashed rounded-lg">
-          종목 목록을 불러오지 못했습니다
+        {/* 왼쪽: 자산 배분 차트 */}
+        <div className="lg:col-span-4 space-y-lg">
+          <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm">
+            <div className="flex justify-between items-center mb-lg">
+              <h2 className="text-headline-md font-semibold">Asset Allocation</h2>
+              <span className="material-symbols-outlined text-on-surface-variant">pie_chart</span>
+            </div>
+            <ErrorBoundary fallback={
+              <div className="h-24 flex items-center justify-center text-caption text-on-surface-variant">
+                차트를 불러오지 못했습니다
+              </div>
+            }>
+              {holdings.length > 0
+                ? <SectorChart holdings={holdings} />
+                : <div className="h-32 flex items-center justify-center text-caption text-on-surface-variant">보유 종목이 없습니다</div>
+              }
+            </ErrorBoundary>
+          </div>
         </div>
-      }>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-              보유 종목 ({holdings.length})
-            </CardTitle>
-            {!showForm && (
-              <Button size="sm" variant="outline" onClick={() => setShowForm(true)}>
-                + 종목 추가
-              </Button>
-            )}
-          </CardHeader>
-          <CardContent className="space-y-3">
+
+        {/* 오른쪽: 보유 종목 테이블 */}
+        <div className="lg:col-span-8">
+          <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-sm overflow-hidden">
+
+            {/* 테이블 헤더 */}
+            <div className="p-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low/30">
+              <h2 className="text-headline-md font-semibold">
+                Current Holdings ({holdings.length})
+              </h2>
+              {!showForm && (
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="bg-primary text-on-primary px-md py-xs rounded-lg text-label-mono flex items-center gap-xs hover:opacity-90 transition-opacity active:scale-95 duration-100"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Add Holding
+                </button>
+              )}
+            </div>
+
+            {/* 종목 추가 폼 */}
             {showForm && (
-              <div className="border rounded-lg p-4 bg-secondary/30">
+              <div className="p-md border-b border-outline-variant/20 bg-surface-container-low/30">
                 <HoldingForm
                   onSubmit={async (data) => { await addMutation.mutateAsync(data) }}
                   onCancel={() => setShowForm(false)}
@@ -198,33 +207,50 @@ export default function PortfolioDetailPage() {
               </div>
             )}
 
-            {holdings.length === 0 && !showForm && (
-              <div className="py-10 text-center text-sm text-muted-foreground">
+            {/* 테이블 */}
+            {holdings.length === 0 && !showForm ? (
+              <div className="py-16 text-center text-on-surface-variant text-body-md">
                 보유 종목이 없습니다
               </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-surface-container-lowest text-label-mono text-on-surface-variant uppercase text-[12px] border-b border-outline-variant/20">
+                      <th className="px-md py-sm font-medium w-12"></th>
+                      <th className="px-md py-sm font-medium">Asset</th>
+                      <th className="px-md py-sm font-medium">Shares / Avg</th>
+                      <th className="px-md py-sm font-medium text-right">Price / Change</th>
+                      <th className="px-md py-sm font-medium text-right">Market Value</th>
+                      <th className="px-md py-sm font-medium w-16"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-outline-variant/10">
+                    <DndContext
+                      sensors={sensors}
+                      collisionDetection={closestCenter}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <SortableContext
+                        items={holdings.map((h) => h.id)}
+                        strategy={verticalListSortingStrategy}
+                      >
+                        {holdings.map((holding) => (
+                          <SortableHoldingRow
+                            key={holding.id}
+                            holding={holding}
+                            onDelete={(holdingId) => deleteMutation.mutate(holdingId)}
+                          />
+                        ))}
+                      </SortableContext>
+                    </DndContext>
+                  </tbody>
+                </table>
+              </div>
             )}
-
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={holdings.map((h) => h.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                {holdings.map((holding) => (
-                  <SortableHoldingRow
-                    key={holding.id}
-                    holding={holding}
-                    onDelete={(holdingId) => deleteMutation.mutate(holdingId)}
-                  />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </CardContent>
-        </Card>
-      </ErrorBoundary>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
