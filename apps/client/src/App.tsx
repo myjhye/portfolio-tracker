@@ -49,7 +49,7 @@ export default function App() {
               <Layout><WatchlistPage /></Layout>
             </ProtectedRoute>
           } />
-          <Route path="*" element={<Navigate to="/portfolios" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

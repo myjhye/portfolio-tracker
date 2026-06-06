@@ -2,7 +2,7 @@
  * Portfolio Tracker API 서버 진입점
  *
  * Fastify 앱을 생성하고 플러그인(CORS, JWT, Cookie)과
- * 도메인별 라우트(auth, portfolio, holding, watchlist, quotes)를 등록합니다.
+ * 도메인별 라우트(auth, portfolio, holding, watchlist, quotes, dashboard)를 등록합니다.
  */
 import Fastify from "fastify"
 import { registerPlugins } from "./plugins/index"
@@ -11,6 +11,7 @@ import { portfolioRoutes } from "./modules/portfolio/portfolio.route"
 import { holdingRoutes } from "./modules/holding/holding.route"
 import { watchlistRoutes } from "./modules/watchlist/watchlist.route"
 import { quotesRoutes } from "./modules/quotes/quotes.route"
+import { dashboardRoutes } from "./modules/dashboard/dashboard.route"
 
 const app = Fastify({ logger: true })
 
@@ -24,6 +25,7 @@ const start = async () => {
   await app.register(holdingRoutes)
   await app.register(watchlistRoutes)
   await app.register(quotesRoutes)
+  await app.register(dashboardRoutes)
 
   app.get("/health", async () => ({ status: "ok" }))
 

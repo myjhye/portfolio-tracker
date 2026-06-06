@@ -31,7 +31,7 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
 
         {/* 로고 */}
-        <Link to="/portfolios" className="font-semibold text-lg tracking-tight">
+        <Link to="/dashboard" className="font-semibold text-lg tracking-tight">
           📈 PortfolioTracker
         </Link>
 
