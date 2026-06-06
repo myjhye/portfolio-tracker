@@ -1,16 +1,15 @@
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useAuthStore } from "@/store/authStore"
 import { useThemeStore } from "@/store/themeStore"
-import { Button } from "@/components/ui/button"
 import api from "@/lib/api"
 
-const GITHUB_URL = "https://github.com/myjhye/portfolio-tracker"
-
 const NAV_ITEMS = [
-  { label: "포트폴리오", path: "/portfolios" },
-  { label: "관심 종목", path: "/watchlist" },
-  { label: "대시보드", path: "/dashboard" },
+  { label: "Portfolios", path: "/portfolios" },
+  { label: "Watchlist", path: "/watchlist" },
+  { label: "Dashboard", path: "/dashboard" },
 ]
+
+const GITHUB_URL = "https://github.com/myjhye/portfolio-tracker"
 
 export default function Header() {
   const navigate = useNavigate()
@@ -20,6 +19,10 @@ export default function Header() {
   const isDark = useThemeStore((s) => s.isDark)
   const toggle = useThemeStore((s) => s.toggle)
 
+  const handleToggle = () => {
+    toggle()
+  }
+
   const handleLogout = async () => {
     await api.post("/auth/logout")
     logout()
@@ -27,67 +30,73 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
-      <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+    <nav className="bg-surface/80 backdrop-blur-md fixed top-0 w-full z-50 border-b border-outline-variant/30 shadow-sm h-[72px]">
+      <div className="flex justify-between items-center h-full px-gutter max-w-container-max mx-auto">
 
         {/* 로고 */}
-        <Link to="/dashboard" className="font-semibold text-lg tracking-tight">
-          📈 PortfolioTracker
+        <Link to="/portfolios" className="text-headline-md font-bold text-primary flex items-center gap-2">
+          <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>
+            trending_up
+          </span>
+          PortfolioTracker
         </Link>
 
         {/* 네비게이션 */}
         {user && (
-          <nav className="flex items-center gap-1">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`px-3 py-1.5 rounded-md text-sm transition-colors
-                  ${location.pathname.startsWith(item.path)
-                    ? "bg-secondary font-medium"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                  }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="hidden md:flex items-center gap-lg">
+            {NAV_ITEMS.map((item) => {
+              const isActive = location.pathname.startsWith(item.path)
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={
+                    isActive
+                      ? "text-body-md font-bold text-primary border-b-2 border-primary pb-1"
+                      : "text-body-md text-on-surface-variant hover:text-primary transition-colors"
+                  }
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </div>
         )}
 
         {/* 우측 액션 */}
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-4 w-4"
-                aria-hidden
-              >
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-              GitHub
-            </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggle}
-            className="text-muted-foreground"
+        <div className="flex items-center gap-md">
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-xs px-sm py-base rounded-lg border border-outline-variant/40 hover:bg-surface-container-high/50 transition-all duration-200 text-caption text-on-surface-variant"
           >
-            {isDark ? "☀️" : "🌙"}
-          </Button>
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden>
+              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+            </svg>
+            GitHub
+          </a>
+          <button
+            onClick={handleToggle}
+            className="p-xs rounded-full hover:bg-surface-container-high/50 transition-all duration-200"
+          >
+            <span className="material-symbols-outlined text-on-surface-variant">
+              {isDark ? "light_mode" : "dark_mode"}
+            </span>
+          </button>
           {user && (
-            <>
-              <span className="text-sm text-muted-foreground">{user.name}</span>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                로그아웃
-              </Button>
-            </>
+            <div className="flex items-center gap-sm ml-base">
+              <span className="text-label-mono text-on-surface-variant">{user.name}</span>
+              <button
+                onClick={handleLogout}
+                className="px-md py-base bg-primary text-on-primary text-label-mono rounded-lg hover:scale-95 duration-100 ease-in-out"
+              >
+                Logout
+              </button>
+            </div>
           )}
         </div>
       </div>
-    </header>
+    </nav>
   )
 }

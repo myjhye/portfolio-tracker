@@ -2,17 +2,44 @@ import tailwindcssAnimate from "tailwindcss-animate"
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: ["class"],
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       colors: {
-        background: "hsl(var(--background))",
+        background: "var(--color-background)",
+        surface: "var(--color-surface)",
+        "surface-container-lowest": "var(--color-surface-container-lowest)",
+        "surface-container-low": "var(--color-surface-container-low)",
+        "surface-container": "var(--color-surface-container)",
+        "surface-container-high": "var(--color-surface-container-high)",
+        "surface-container-highest": "var(--color-surface-container-highest)",
+        "on-surface": "var(--color-on-surface)",
+        "on-surface-variant": "var(--color-on-surface-variant)",
+        "outline-variant": "var(--color-outline-variant)",
+        primary: {
+          DEFAULT: "var(--color-primary)",
+          foreground: "var(--color-on-primary)",
+        },
+        "on-primary": "var(--color-on-primary)",
+        "primary-container": "var(--color-primary-container)",
+        "on-primary-container": "var(--color-on-primary-container)",
+        secondary: {
+          DEFAULT: "var(--color-secondary)",
+          foreground: "#ffffff",
+        },
+        "secondary-container": "#645efb",
+        "on-secondary-container": "#fffbff",
+        "tertiary-container": "var(--color-tertiary-container)",
+        "on-tertiary": "var(--color-on-tertiary)",
+        "on-tertiary-container": "var(--color-on-tertiary-container)",
+        "surface-dim": "#d8dadc",
+        "inverse-surface": "#2d3133",
+        "surface-bright": "var(--color-surface)",
+        outline: "#76777d",
+        error: "#ba1a1a",
+        "error-container": "#ffdad6",
+        "on-error": "#ffffff",
         foreground: "hsl(var(--foreground))",
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -21,14 +48,6 @@ export default {
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
-        },
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -52,6 +71,39 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+      },
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+        full: "9999px",
+      },
+      spacing: {
+        xl: "48px",
+        "container-max": "1280px",
+        sm: "16px",
+        base: "4px",
+        gutter: "24px",
+        lg: "32px",
+        md: "24px",
+        xs: "8px",
+      },
+      fontFamily: {
+        sans: ["Geist", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
+      },
+      fontSize: {
+        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+        "data-lg-mono": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+        "label-mono": ["14px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "500" }],
+        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+        caption: ["12px", { lineHeight: "16px", fontWeight: "500" }],
+      },
+      maxWidth: {
+        "container-max": "1280px",
       },
     },
   },
