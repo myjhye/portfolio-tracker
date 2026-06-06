@@ -64,10 +64,10 @@ describe("낙관적 업데이트", () => {
     render(<Wrapper><PortfolioDetailPage /></Wrapper>)
 
     await waitFor(() => {
-      expect(screen.getByText("+ 종목 추가")).toBeInTheDocument()
+      expect(screen.getByText("Add Holding")).toBeInTheDocument()
     })
 
-    await userEvent.click(screen.getByText("+ 종목 추가"))
+    await userEvent.click(screen.getByText("Add Holding"))
 
     await userEvent.type(screen.getByPlaceholderText("AAPL"), "AAPL")
     await userEvent.type(screen.getAllByRole("spinbutton")[0], "10")
