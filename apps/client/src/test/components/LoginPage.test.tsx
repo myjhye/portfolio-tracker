@@ -45,6 +45,7 @@ describe("LoginPage", () => {
 
   it("비밀번호가 비어있으면 에러 메시지가 표시된다", async () => {
     renderLoginPage()
+    await userEvent.clear(screen.getByLabelText("비밀번호"))
     await userEvent.type(screen.getByLabelText("이메일"), "test@test.com")
     fireEvent.submit(screen.getByRole("button", { name: "로그인" }).closest("form")!)
     await waitFor(() => {
