@@ -1,0 +1,8 @@
+{
+  "buildCommand": "pnpm install && pnpm --filter @portfolio-tracker/shared run build && pnpm --filter @portfolio-tracker/client run build",
+  "outputDirectory": "apps/client/dist",
+  "installCommand": "pnpm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
