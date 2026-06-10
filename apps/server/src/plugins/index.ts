@@ -5,9 +5,11 @@ import fastifyCors from "@fastify/cors"
 
 // ── Fastify 플러그인 일괄 등록 ──
 export async function registerPlugins(app: FastifyInstance) {
-  // CORS: localhost 모든 포트 허용 (개발 환경)
   await app.register(fastifyCors, {
-    origin: /^http:\/\/localhost:\d+$/,
+    origin: [
+      /^http:\/\/localhost:\d+$/,
+      "https://portfolio-tracker-client-fzx9.vercel.app",
+    ],
     credentials: true,
   })
 
