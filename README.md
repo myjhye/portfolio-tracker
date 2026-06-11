@@ -91,6 +91,37 @@ const body = AddHoldingSchema.parse(req.body)
 useForm<AddHoldingInput>({ resolver: zodResolver(AddHoldingSchema) })
 ```
 
+## 아키텍처
+
+상세 설계 문서: [docs/architecture.md](./docs/architecture.md)
+
+### 시스템 구성
+
+```text
+사용자
+│ HTTPS
+▼
+Vercel (React + Vite)
+│ HTTPS + Cookie
+▼
+Railway
+├── Fastify API 서버 (public)
+├── PostgreSQL (internal)
+└── Redis (internal)
+│ HTTPS
+▼
+Alpha Vantage API (외부 시세)
+```
+
+### 시세 조회 흐름
+
+```text
+클라이언트 요청
+▼
+Redis 캐시 확인
+├─ hit  → 즉시 반환 (API 호출 없음)
+└─ miss → Alpha Vantage 호출 → Redis 저장 (24시간) → 반환
+```
 
 ## 디렉토리 구조
 
