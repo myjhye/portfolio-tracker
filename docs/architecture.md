@@ -2,30 +2,8 @@
 
 ## 시스템 구성
 
-```mermaid
-flowchart TD
-    User(["사용자"])
+<img width="1440" height="1350" alt="image" src="https://github.com/user-attachments/assets/63aecd34-c6c0-41cc-85d2-088a08e8bd0b" />
 
-    subgraph Vercel["Vercel (Frontend)"]
-        Client["portfolio-tracker-client<br/>React + Vite + TypeScript<br/>.vercel.app"]
-    end
-
-    subgraph Railway["Railway (Backend)"]
-        Server["portfolio-tracker (Fastify)<br/>Node.js + TypeScript<br/>public :4000"]
-        subgraph Internal["internal only"]
-            DB[("PostgreSQL<br/>(DB)")]
-            Cache[("Redis<br/>(Cache)")]
-        end
-    end
-
-    ExtAPI["Alpha Vantage<br/>(주가 시세 데이터)"]
-
-    User -->|"HTTPS"| Client
-    Client -->|"HTTPS + Cookie"| Server
-    Server -->|"Prisma"| DB
-    Server -->|"ioredis"| Cache
-    Server -->|"HTTPS"| ExtAPI
-```
 
 ## 요청 흐름
 
