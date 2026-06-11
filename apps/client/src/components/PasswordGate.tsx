@@ -33,7 +33,9 @@ export function PasswordGate({ children }: Props) {
         <div>
           <h1 className="text-headline-md font-bold text-primary">PortfolioTracker</h1>
           <p className="text-caption text-on-surface-variant mt-base">
-            접근 비밀번호를 입력하세요. 비밀번호는 포트폴리오 페이지에서 확인할 수 있습니다.
+            접근 비밀번호를 입력하세요.
+            <br />
+            비밀번호는 포트폴리오 페이지에서 확인할 수 있습니다.
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-sm">
