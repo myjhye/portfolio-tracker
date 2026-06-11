@@ -9,11 +9,7 @@ React + Fastify 기반 풀스택 주식 포트폴리오 트래커
 | **사용자 화면** | [portfolio-tracker-client-fzx9.vercel.app](https://portfolio-tracker-client-fzx9.vercel.app) |
 | **API Health Check** | [portfolio-tracker-production-f784.up.railway.app/health](https://portfolio-tracker-production-f784.up.railway.app/health) |
 
-> 데모 접속 비밀번호가 필요합니다.
-
 배포 환경: Vercel(프론트) + Railway(백엔드 + PostgreSQL + Redis)
-
----
 
 ## 핵심 특징
 
@@ -29,7 +25,6 @@ React + Fastify 기반 풀스택 주식 포트폴리오 트래커
 - **에러 바운더리** — 차트/리스트 영역별 독립 에러 처리
 - **단위 테스트** — Vitest + Testing Library (폼, Protected Route, 낙관적 업데이트)
 
----
 
 ## 기술 스택
 
@@ -67,7 +62,6 @@ Zod 스키마 + TypeScript 타입 — 프론트/백엔드 단일 소스. 한 곳
 
 Turborepo (monorepo), Docker (로컬 DB), Railway, Vercel
 
----
 
 ## 주요 기능 상세
 
@@ -97,7 +91,6 @@ const body = AddHoldingSchema.parse(req.body)
 useForm<AddHoldingInput>({ resolver: zodResolver(AddHoldingSchema) })
 ```
 
----
 
 ## 디렉토리 구조
 
@@ -136,7 +129,6 @@ portfolio-tracker/
 └── pnpm-workspace.yaml
 ```
 
----
 
 ## 로컬 실행
 
@@ -171,7 +163,6 @@ pnpm dev
 | 서버 | http://localhost:4000 |
 | Health Check | http://localhost:4000/health |
 
----
 
 ## 배포
 
@@ -189,7 +180,6 @@ pnpm dev
 
 `main` 브랜치 push 시 자동 배포. `VITE_API_URL` 환경변수를 Railway 서버 URL로 설정.
 
----
 
 ## 환경변수
 
