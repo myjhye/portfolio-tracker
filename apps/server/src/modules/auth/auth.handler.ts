@@ -3,6 +3,14 @@ import bcrypt from "bcrypt"
 import prisma from "../../lib/prisma"
 import { RegisterSchema, LoginSchema } from "@portfolio-tracker/shared"
 
+const TOKEN_COOKIE_OPTIONS = {
+  httpOnly: true,
+  path: "/",
+  maxAge: 60 * 60 * 24 * 7,
+  sameSite: "none" as const,
+  secure: true,
+}
+
 // ── 회원가입 ──
 // 1) 입력값 검증 → 2) 이메일 중복 확인 → 3) 비밀번호 해싱 후 DB 저장 → 4) JWT 쿠키 발급
 export async function registerHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -18,7 +26,7 @@ export async function registerHandler(req: FastifyRequest, reply: FastifyReply) 
 
   const token = await reply.jwtSign({ id: user.id, email: user.email })
   reply
-    .setCookie("token", token, { httpOnly: true, path: "/", maxAge: 60 * 60 * 24 * 7 })
+    .setCookie("token", token, TOKEN_COOKIE_OPTIONS)
     .send({ id: user.id, email: user.email, name: user.name })
 }
 
@@ -35,18 +43,18 @@ export async function loginHandler(req: FastifyRequest, reply: FastifyReply) {
 
   const token = await reply.jwtSign({ id: user.id, email: user.email })
   reply
-    .setCookie("token", token, { httpOnly: true, path: "/", maxAge: 60 * 60 * 24 * 7 })
+    .setCookie("token", token, TOKEN_COOKIE_OPTIONS)
     .send({ id: user.id, email: user.email, name: user.name })
 }
 
 // ── 로그아웃: 쿠키 삭제 ──
 export async function logoutHandler(_req: FastifyRequest, reply: FastifyReply) {
-  reply.clearCookie("token", { path: "/" }).send({ message: "로그아웃 되었습니다" })
+  reply.clearCookie("token", { path: "/", sameSite: "none", secure: true }).send({ message: "로그아웃 되었습니다" })
 }
 
 // ── 회원탈퇴: DB에서 유저 삭제 + 쿠키 삭제 ──
 export async function deleteAccountHandler(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.user as { id: string }
   await prisma.user.delete({ where: { id } })
-  reply.clearCookie("token", { path: "/" }).send({ message: "계정이 삭제되었습니다" })
+  reply.clearCookie("token", { path: "/", sameSite: "none", secure: true }).send({ message: "계정이 삭제되었습니다" })
 }
