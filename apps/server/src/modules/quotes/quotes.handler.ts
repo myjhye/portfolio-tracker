@@ -34,6 +34,9 @@ export async function getQuoteHandler(req: FastifyRequest, reply: FastifyReply) 
     if (!quote) return reply.status(404).send({ message: "종목을 찾을 수 없습니다" })
 
     await redis.setex(cacheKey, QUOTE_TTL, JSON.stringify(quote))
+    // stale 키에도 백업 저장 (TTL 없이 영구 보관, API 장애 시 마지막 보루)
+    await redis.set(`${cacheKey}:stale`, JSON.stringify(quote))
+
     reply.send({ ...quote, fromCache: false })
   } catch {
     // 3) API 오류 — stale 키가 있으면 만료 데이터라도 반환
