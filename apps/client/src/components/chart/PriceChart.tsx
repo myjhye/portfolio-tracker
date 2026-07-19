@@ -37,7 +37,7 @@ export default function PriceChart({ symbol }: Props) {
   const firstPrice = sliced[0].close
   const lastPrice = sliced[sliced.length - 1].close
   const isPositive = lastPrice >= firstPrice
-  const color = isPositive ? "#16a34a" : "#dc2626"
+  const color = isPositive ? "#dc2626" : "#2563eb"
 
   return (
     <div className="space-y-3">
@@ -70,11 +70,11 @@ export default function PriceChart({ symbol }: Props) {
           type="number"
           domain={["auto", "auto"]}
           tick={{ fontSize: 11 }}
-          tickFormatter={(v) => `$${v.toFixed(0)}`}
-          width={55}
+          tickFormatter={(v) => `${Math.round(v).toLocaleString()}원`}
+          width={75}
         />
         <Tooltip
-          formatter={(v: number) => [`$${v.toFixed(2)}`, "종가"]}
+          formatter={(v: number) => [`${Math.round(v).toLocaleString()}원`, "종가"]}
           labelFormatter={(i) => chartData[i as number]?.date ?? ""}
         />
         {/* 시작가 기준선 (유효할 때만 렌더링) */}

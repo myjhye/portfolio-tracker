@@ -66,17 +66,17 @@ export default function HoldingRow({ holding, onDelete, dragHandleProps, rowRef,
         </td>
 
         {/* 수량 / 평균단가 */}
-        <td className="px-md py-md">
-          <div className="text-data-lg-mono text-[14px]">{holding.quantity.toFixed(2)}</div>
-          <div className="text-caption text-on-surface-variant">@ ${holding.avgPrice.toFixed(2)}</div>
+        <td className="px-md py-md whitespace-nowrap">
+          <div className="text-data-lg-mono text-[14px] whitespace-nowrap">{holding.quantity.toFixed(2)}</div>
+          <div className="text-caption text-on-surface-variant whitespace-nowrap">@ {Math.round(holding.avgPrice).toLocaleString()}원</div>
         </td>
 
         {/* 현재가 / 등락률 */}
-        <td className="px-md py-md text-right">
+        <td className="px-md py-md text-right whitespace-nowrap">
           {quote ? (
             <>
-              <div className="text-data-lg-mono text-[14px]">${quote.price.toFixed(2)}</div>
-              <div className={`text-label-mono text-[12px] flex items-center justify-end ${isPositive ? "text-[#1a7f37]" : "text-error"}`}>
+              <div className="text-data-lg-mono text-[14px] whitespace-nowrap">{Math.round(quote.price).toLocaleString()}원</div>
+              <div className={`text-label-mono text-[12px] flex items-center justify-end ${isPositive ? "text-error" : "text-[#2563eb]"}`}>
                 <span className="material-symbols-outlined text-[14px]">
                   {isPositive ? "arrow_drop_up" : "arrow_drop_down"}
                 </span>
@@ -89,14 +89,14 @@ export default function HoldingRow({ holding, onDelete, dragHandleProps, rowRef,
         </td>
 
         {/* 평가금액 / 손익 */}
-        <td className="px-md py-md text-right">
+        <td className="px-md py-md text-right whitespace-nowrap">
           {currentValue !== null ? (
             <>
-              <div className="text-data-lg-mono text-[16px] text-primary">
-                ${currentValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              <div className="text-data-lg-mono text-[16px] text-primary whitespace-nowrap">
+                {Math.round(currentValue).toLocaleString()}원
               </div>
               {gainLossPct !== null && (
-                <div className={`text-label-mono text-[12px] ${isPositive ? "text-[#1a7f37]" : "text-error"}`}>
+                <div className={`text-label-mono text-[12px] ${isPositive ? "text-error" : "text-[#2563eb]"}`}>
                   {isPositive ? "+" : ""}{gainLossPct.toFixed(1)}% Total
                 </div>
               )}

@@ -22,11 +22,11 @@ function WatchlistRow({ symbol, onDelete }: { symbol: string; onDelete: () => vo
         <div>
           <p className="text-body-md font-bold text-primary">{symbol}</p>
           {quote ? (
-            <p className={`text-caption flex items-center gap-[2px] ${isPositive ? "text-[#1a7f37]" : "text-error"}`}>
+            <p className={`text-caption flex items-center gap-[2px] ${isPositive ? "text-error" : "text-[#2563eb]"}`}>
               <span className="material-symbols-outlined text-[14px]">
                 {isPositive ? "arrow_drop_up" : "arrow_drop_down"}
               </span>
-              {Math.abs(quote.change).toFixed(2)} ({Math.abs(quote.changePercent).toFixed(2)}%)
+              {Math.abs(quote.change).toLocaleString()}원 ({Math.abs(quote.changePercent).toFixed(2)}%)
             </p>
           ) : (
             <p className="text-caption text-on-surface-variant">조회 중...</p>
@@ -37,8 +37,8 @@ function WatchlistRow({ symbol, onDelete }: { symbol: string; onDelete: () => vo
       {/* 현재가 + 삭제 */}
       <div className="flex items-center gap-md">
         {quote && (
-          <p className="text-data-lg-mono text-[16px] text-primary">
-            ${quote.price.toFixed(2)}
+          <p className="text-data-lg-mono text-[16px] text-primary whitespace-nowrap">
+            {Math.round(quote.price).toLocaleString()}원
           </p>
         )}
         <button
