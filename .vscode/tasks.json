@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "1. DB 실행 (Docker)",
+      "label": "1. DB 실행 (Docker - 비활성 권장)",
       "type": "shell",
       "command": "docker compose up -d",
       "presentation": {
@@ -21,8 +21,7 @@
       "presentation": {
         "reveal": "always",
         "group": "server-pane"
-      },
-      "dependsOn": ["1. DB 실행 (Docker)"]
+      }
     },
     {
       "label": "3. Client 실행 (React)",
