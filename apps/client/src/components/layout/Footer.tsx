@@ -7,13 +7,13 @@ export default function Footer() {
         </div>
         <div className="flex gap-lg text-caption text-on-surface-variant">
           <span className="hover:underline decoration-primary transition-all cursor-pointer">
-            Built with Fastify
+            Fastify 백엔드
           </span>
           <span className="hover:underline decoration-primary transition-all cursor-pointer">
-            React
+            React 프론트엔드
           </span>
           <span className="hover:underline decoration-primary transition-all cursor-pointer">
-            PostgreSQL
+            PostgreSQL 데이터베이스
           </span>
         </div>
       </div>

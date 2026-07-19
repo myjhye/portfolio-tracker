@@ -132,7 +132,7 @@ export default function PortfolioDetailPage() {
           <span className="material-symbols-outlined text-[20px] group-hover:-translate-x-1 transition-transform">
             arrow_back
           </span>
-          <span className="text-label-mono">Back to Portfolios</span>
+          <span className="text-label-mono">포트폴리오 목록</span>
         </button>
       </div>
 
@@ -146,10 +146,10 @@ export default function PortfolioDetailPage() {
         </div>
         <div className="flex flex-col items-end">
           <span className="text-label-mono text-on-surface-variant uppercase tracking-wider">
-            Total Cost Basis
+            총 매수 금액
           </span>
           <div className="text-data-lg-mono font-bold text-primary">
-            ${totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            {Math.round(totalCost).toLocaleString()}원
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function PortfolioDetailPage() {
         <div className="lg:col-span-4 space-y-lg">
           <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm">
             <div className="flex justify-between items-center mb-lg">
-              <h2 className="text-headline-md font-semibold">Asset Allocation</h2>
+              <h2 className="text-headline-md font-semibold">자산 배분</h2>
               <span className="material-symbols-outlined text-on-surface-variant">pie_chart</span>
             </div>
             <ErrorBoundary fallback={
@@ -184,7 +184,7 @@ export default function PortfolioDetailPage() {
             {/* 테이블 헤더 */}
             <div className="p-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low/30">
               <h2 className="text-headline-md font-semibold">
-                Current Holdings ({holdings.length})
+                보유 종목 ({holdings.length})
               </h2>
               {!showForm && (
                 <button
@@ -192,7 +192,7 @@ export default function PortfolioDetailPage() {
                   className="bg-primary text-on-primary px-md py-xs rounded-lg text-label-mono flex items-center gap-xs hover:opacity-90 transition-opacity active:scale-95 duration-100"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
-                  Add Holding
+                  종목 추가
                 </button>
               )}
             </div>
@@ -218,10 +218,10 @@ export default function PortfolioDetailPage() {
                   <thead>
                     <tr className="bg-surface-container-lowest text-label-mono text-on-surface-variant uppercase text-[12px] border-b border-outline-variant/20">
                       <th className="px-md py-sm font-medium w-12"></th>
-                      <th className="px-md py-sm font-medium">Asset</th>
-                      <th className="px-md py-sm font-medium">Shares / Avg</th>
-                      <th className="px-md py-sm font-medium text-right">Price / Change</th>
-                      <th className="px-md py-sm font-medium text-right">Market Value</th>
+                      <th className="px-md py-sm font-medium">자산</th>
+                      <th className="px-md py-sm font-medium">보유 수량 / 평균단가</th>
+                      <th className="px-md py-sm font-medium text-right">현재가 / 전일대비</th>
+                      <th className="px-md py-sm font-medium text-right">평가 금액</th>
                       <th className="px-md py-sm font-medium w-16"></th>
                     </tr>
                   </thead>

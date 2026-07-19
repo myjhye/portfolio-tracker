@@ -3,9 +3,9 @@ import { useAuthStore } from "@/store/authStore"
 import api from "@/lib/api"
 
 const NAV_ITEMS = [
-  { label: "Portfolios", path: "/portfolios" },
-  { label: "Watchlist", path: "/watchlist" },
-  { label: "Dashboard", path: "/dashboard" },
+  { label: "포트폴리오", path: "/portfolios" },
+  { label: "관심 종목", path: "/watchlist" },
+  { label: "대시보드", path: "/dashboard" },
 ]
 
 const GITHUB_URL = "https://github.com/myjhye/portfolio-tracker"
@@ -76,7 +76,7 @@ export default function Header() {
                 onClick={handleLogout}
                 className="px-md py-base bg-primary text-on-primary text-label-mono rounded-lg hover:scale-95 duration-100 ease-in-out"
               >
-                Logout
+                로그아웃
               </button>
             </div>
           )}

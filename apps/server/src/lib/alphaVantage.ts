@@ -8,6 +8,7 @@ import axios from "axios"
 
 const BASE_URL = "https://www.alphavantage.co/query"
 const API_KEY = process.env.ALPHA_VANTAGE_API_KEY
+const USD_TO_KRW = 1400
 
 /**
  * 종목 심볼로 실시간 시세 조회
@@ -28,8 +29,8 @@ export async function fetchQuote(symbol: string): Promise<{ symbol: string; pric
 
   return {
     symbol,
-    price: parseFloat(quote["05. price"]),
-    change: parseFloat(quote["09. change"]),
+    price: Math.round(parseFloat(quote["05. price"]) * USD_TO_KRW),
+    change: Math.round(parseFloat(quote["09. change"]) * USD_TO_KRW),
     changePercent: parseFloat(quote["10. change percent"].replace("%", "")),
   }
 }
@@ -53,7 +54,7 @@ export async function fetchDailyHistory(symbol: string) {
   return Object.entries(series)
     .map(([date, values]: [string, any]) => ({
       date,
-      close: parseFloat(values["4. close"]),
+      close: Math.round(parseFloat(values["4. close"]) * USD_TO_KRW),
     }))
     .reverse()
 }

@@ -47,7 +47,7 @@ export default function DashboardPage() {
             },
             {
               label: "총 매수 금액",
-              value: `$${totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
+              value: `${Math.round(totalCost).toLocaleString()}원`,
               sub: "매수 기준 평가",
             },
           ].map((stat) => (
@@ -131,7 +131,7 @@ export default function DashboardPage() {
                   <div className="mt-md md:mt-0 text-right">
                     <p className="text-caption text-on-surface-variant mb-base">매수 금액</p>
                     <p className="text-data-lg-mono font-bold text-primary">
-                      ${p.totalCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                      {Math.round(p.totalCost).toLocaleString()}원
                     </p>
                   </div>
                 </div>
@@ -141,9 +141,9 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-xl">
                 <div className="bg-tertiary-container text-on-tertiary rounded-xl p-lg relative overflow-hidden h-48 flex items-center">
                   <div className="z-10">
-                    <h4 className="text-headline-md font-bold mb-xs">Market Trends</h4>
+                    <h4 className="text-headline-md font-bold mb-xs">시장 트렌드</h4>
                     <p className="text-body-md text-on-tertiary-container">
-                      Check real-time indices and upcoming earnings
+                      실시간 지수 및 예정된 실적 발표 확인
                     </p>
                   </div>
                   <div className="absolute -right-8 -bottom-8 opacity-20 transform rotate-12">

@@ -57,7 +57,7 @@ export default function SectorChart({ holdings }: Props) {
           </Pie>
           <Tooltip
             formatter={(v: number) => [
-              `$${v.toLocaleString()} (${((v / total) * 100).toFixed(1)}%)`,
+              `${Math.round(v).toLocaleString()}원 (${((v / total) * 100).toFixed(1)}%)`,
               "평가금액"
             ]}
           />
@@ -77,7 +77,7 @@ export default function SectorChart({ holdings }: Props) {
             </div>
             <div className="flex items-center gap-md">
               <span className="text-caption text-on-surface-variant">
-                ${d.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                {Math.round(d.value).toLocaleString()}원
               </span>
               <span className="text-label-mono text-on-surface w-12 text-right">
                 {((d.value / total) * 100).toFixed(1)}%
