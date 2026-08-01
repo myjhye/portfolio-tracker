@@ -23,11 +23,14 @@ export async function fetchQuote(symbol: string): Promise<{ symbol: string; pric
     },
   })
 
-  console.log("Alpha Vantage raw response:", JSON.stringify(data))
+  // rate limit / 에러 메시지는 별도로 던져서 핸들러의 catch(stale fallback)가 처리하게 함
+  if (data["Information"] || data["Note"] || data["Error Message"]) {
+    throw new Error(data["Information"] || data["Note"] || data["Error Message"])
+  }
 
   // Alpha Vantage 응답 키는 "05. price" 형태의 번호 접두사 사용
   const quote = data["Global Quote"]
-  if (!quote || !quote["05. price"]) return null
+  if (!quote || !quote["05. price"]) return null // 진짜로 종목이 없는 경우만 null
 
   return {
     symbol,
@@ -50,6 +53,11 @@ export async function fetchDailyHistory(symbol: string) {
       apikey: API_KEY,
     },
   })
+
+  if (data["Information"] || data["Note"] || data["Error Message"]) {
+    throw new Error(data["Information"] || data["Note"] || data["Error Message"])
+  }
+
   const series = data["Time Series (Daily)"]
   if (!series) return null
 
