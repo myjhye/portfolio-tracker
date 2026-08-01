@@ -23,6 +23,8 @@ export async function fetchQuote(symbol: string): Promise<{ symbol: string; pric
     },
   })
 
+  console.log("Alpha Vantage raw response:", JSON.stringify(data))
+
   // Alpha Vantage 응답 키는 "05. price" 형태의 번호 접두사 사용
   const quote = data["Global Quote"]
   if (!quote || !quote["05. price"]) return null
